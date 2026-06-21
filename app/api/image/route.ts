@@ -15,12 +15,11 @@ export async function POST(req: NextRequest) {
 
   try {
     const result = await client.images.generate({
-      model: "dall-e-3",
+      model: "gpt-image-1",
       prompt,
-      size: "1792x1024",
-      quality: "standard",
+      size: "1536x1024",
+      quality: "high",
       n: 1,
-      response_format: "b64_json",
     });
 
     const b64 = result.data?.[0]?.b64_json;
