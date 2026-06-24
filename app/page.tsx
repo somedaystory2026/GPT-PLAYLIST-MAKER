@@ -51,6 +51,9 @@ const variationOptions = [
   "80년대 레트로 신스 사운드",
   "웅장한 시네마틱 사운드",
   "No intro, direct vocal start at 0:00",
+  "후렴 단어/문구 반복 강조 (Hook repetition lock-in)",
+  "끝나지 않는 루프 엔딩 (Seamless loop, no resolution)",
+  "스토리 없이 감정 위주 폭발 (설명 없이 감정만)",
 ];
 
 // 플레이리스트 용도/장르 옵션 (다중 선택)
@@ -67,6 +70,8 @@ const useCaseOptions = [
   "Acoustic/Live",
   "드라이브",
   "휴식",
+  "Bollywood OST",
+  "Wedding/Festival",
 ];
 
 // SEO 다국어 탭
