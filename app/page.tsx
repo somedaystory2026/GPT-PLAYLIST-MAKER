@@ -50,6 +50,7 @@ const variationOptions = [
   "베이스 라인 강조 (Groovy)",
   "80년대 레트로 신스 사운드",
   "웅장한 시네마틱 사운드",
+  "No intro, direct vocal start at 0:00",
 ];
 
 // 플레이리스트 용도/장르 옵션 (다중 선택)
