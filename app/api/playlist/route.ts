@@ -17,7 +17,7 @@ const langMap: Record<string, string> = {
 
 export async function POST(req: NextRequest) {
   try {
-    const { videos, count, language, variations, useCases, openaiKey } = await req.json();
+    const { videos, count, language, variations, useCases, genre, keyword, openaiKey } = await req.json();
 
     if (!openaiKey) {
       return NextResponse.json({ error: "OpenAI API 키가 없습니다." }, { status: 400 });
@@ -35,10 +35,14 @@ export async function POST(req: NextRequest) {
 
     const variationText = Array.isArray(variations) && variations.length ? variations.join(", ") : "없음";
     const useCaseText = Array.isArray(useCases) && useCases.length ? useCases.join(", ") : "없음";
+    const genreText = (genre && String(genre).trim()) || (keyword && String(keyword).trim()) || "참조 영상 분위기에서 자유롭게 추론";
 
     async function generateOne(index: number) {
       const prompt = `
-당신은 세계적인 수준의 Suno AI 작사가/프로듀서이자 ASMR/Lo-fi 사운드 디자이너입니다.
+당신은 세계적인 수준의 Suno AI 작사가/프로듀서이자 사운드 디자이너입니다. 장르에 따라 완전히 다른 사운드를 만들어낼 수 있는 다재다능한 프로듀서이며, 특정 장르(로파이/재즈 등)에 치우치지 않습니다.
+
+이번 플레이리스트의 핵심 장르/스타일: ${genreText}
+(반드시 이 장르/스타일에 맞는 BPM, 악기, 보컬 톤을 사용하세요. 예를 들어 EDM/Workout 계열이면 120~140 BPM의 강한 비트, K-Pop/Pop이면 90~128 BPM의 화려한 프로덕션, Jazz면 스윙감 있는 110~140 BPM도 가능, Lo-fi/Meditation 계열만 60~80 BPM의 느린 템포를 사용하세요. 장르와 무관하게 무조건 느린 다운템포로 만들지 마세요.)
 
 참조 영상 목록 (이 영상들의 성공 요인을 참고해 전체적인 분위기를 잡아주세요):
 ${referenceContext}
@@ -53,11 +57,11 @@ ${referenceContext}
 [1] Style of Music 작성 규칙
 ──────────────────────────────────
 영문으로 400~700자 분량의 하나의 자연스러운 문단으로 작성하세요. 아래 요소를 모두 자연스럽게 녹여내세요:
-- 정확한 BPM과 템포/장르 퓨전 표현을 맨 앞에 배치 (예: "A soothing, down-tempo Chillhop and acoustic jazz fusion track at 68 BPM")
-- 핵심 악기와 그 역할을 구체적으로 묘사 (예: finger-picked acoustic guitar, muted upright bass providing a walking groove)
-- 곡의 장소/테마에 어울리는 실제 환경음(ASMR/Foley)을 비트의 구성 요소로 자연스럽게 짜넣기 (예: 커피 그라인더 소리가 셰이커 역할, 카페 냉장고 모터 소리가 드론 패드, 뜨거운 물 따르는 소리가 리듬을 잡아줌, 나무 스푼이 도자기에 부딪히는 퍼커션 등 — 매번 새로운 장면으로 창작)
+- 위에서 지정한 핵심 장르/스타일(${genreText})에 맞는 정확한 BPM과 장르 표현을 맨 앞에 배치 (장르에 어울리는 템포를 선택하고, 그 장르가 로파이/칠/명상류가 아니라면 느린 다운템포를 강요하지 마세요)
+- 핵심 악기와 그 역할을 구체적으로 묘사 (장르에 맞는 악기 구성을 사용하세요. 예: EDM이면 신스/사이드체인 베이스, 록이면 디스토션 기타/드럼킷, 재즈면 어쿠스틱 베이스/브러시 드럼 등)
+- 장르와 곡의 장소/테마에 어울리는 사운드 디자인 요소를 비트의 구성 요소로 자연스럽게 짜넣기 (느린 ASMR/카페 환경음은 해당 장르가 Lo-fi/Chill/Meditation 계열일 때만 사용하고, 그 외 장르에는 그 장르에 맞는 사운드 디자인을 사용하세요 — 매번 새로운 장면으로 창작)
 - 보컬 스타일을 상세히 묘사 (톤, 감정, 발음 느낌, 코러스/허밍 여부, 비하인드 더 비트 등)
-- 믹스/공간 효과 기법 묘사 (예: binaural panning, lush plate reverb, lo-fi tape warmth, rolled-off high frequencies for fatigue-free listening)
+- 믹스/공간 효과 기법 묘사 (장르에 맞는 믹스 기법, 예: EDM이면 사이드체인 컴프레션과 와이드 스테레오, 발라드면 lush plate reverb 등)
 - 마지막 문장은 이 곡이 청자에게 어떤 경험/감정을 주는지로 마무리
 - 클리셰 단어 금지: dream, shining, sky, tonight, forever
 
