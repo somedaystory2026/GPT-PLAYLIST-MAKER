@@ -469,6 +469,8 @@ export default function Home() {
           language: playlistLanguage,
           variations: selectedVariations,
           useCases: selectedUseCases,
+          genre: selectedGenre,
+          keyword,
           openaiKey,
         }),
       });
